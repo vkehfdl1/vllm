@@ -35,7 +35,7 @@ from vllm.model_executor.input_metadata import InputMetadata
 from vllm.model_executor.layers.activation import SiluAndMul
 from vllm.model_executor.layers.layernorm import RMSNorm
 from vllm.model_executor.layers.attention import PagedAttentionWithRoPE
-from vllm.model_executor.layers.sampler import Sampler
+from vllm.model_executor.layers.sampler import ArgmaxSampler, Sampler
 from vllm.model_executor.weight_utils import (hf_model_weights_iterator,
                                               load_tensor_parallel_weights)
 from vllm.model_executor.parallel_utils.parallel_state import (
@@ -240,7 +240,7 @@ class LlamaForCausalLM(nn.Module):
                                             bias=False,
                                             gather_output=False,
                                             perform_initialization=False)
-        self.sampler = Sampler(config.vocab_size)
+        self.sampler = ArgmaxSampler(config.vocab_size)
 
     def forward(
         self,
